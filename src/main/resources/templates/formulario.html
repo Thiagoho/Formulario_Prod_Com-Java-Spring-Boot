@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cadastro de Pedido</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script>
+        function adicionarProduto() {
+            // Criar um novo div para um novo produto
+            var novoProduto = document.createElement('div');
+            novoProduto.classList.add('form-group');
+            
+            // Campo Nome do Produto
+            var labelNomeProduto = document.createElement('label');
+            labelNomeProduto.innerText = 'Nome do Produto';
+            var inputNomeProduto = document.createElement('input');
+            inputNomeProduto.type = 'text';
+            inputNomeProduto.classList.add('form-control');
+            inputNomeProduto.name = 'nomeProduto[]';  // Nome como array
+            inputNomeProduto.placeholder = 'Nome do Produto';
+
+            // Campo Quantidade do Produto
+            var labelQuantidadeProduto = document.createElement('label');
+            labelQuantidadeProduto.innerText = 'Quantidade';
+            var inputQuantidadeProduto = document.createElement('input');
+            inputQuantidadeProduto.type = 'number';
+            inputQuantidadeProduto.classList.add('form-control');
+            inputQuantidadeProduto.name = 'quantidadeProduto[]';  // Nome como array
+            inputQuantidadeProduto.placeholder = 'Quantidade';
+
+            // Adicionar os campos criados ao novo div
+            novoProduto.appendChild(labelNomeProduto);
+            novoProduto.appendChild(inputNomeProduto);
+            novoProduto.appendChild(labelQuantidadeProduto);
+            novoProduto.appendChild(inputQuantidadeProduto);
+
+            // Adicionar o novo produto ao formulário
+            document.getElementById('produtos').appendChild(novoProduto);
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Cadastro de Pedido</h2>
+        <form th:action="@{/enviarEmail}" th:object="${pedidoForm}" method="post" class="form-group">
+            <div class="form-group">
+                <label for="nomeColaborador">Nome do Colaborador</label>
+                <input type="text" id="nomeColaborador" class="form-control" th:field="*{nomeColaborador}" placeholder="Nome do Colaborador" required>
+            </div>
+            
+            <div id="produtos">
+                <div class="form-group">
+                    <label for="nomeProduto">Nome do Produto</label>
+                    <input type="text" id="nomeProduto" class="form-control" th:field="*{nomeProduto}" placeholder="Nome do Produto" required>
+                    
+                    <label for="pedido">Quantidade</label>
+                    <input type="number" id="pedido" class="form-control" th:field="*{pedido}" value="1" min="1" required>
+                </div>
+            </div>
+
+            <!-- Botão para adicionar mais produtos -->
+            <button type="button" class="btn btn-secondary mb-3" onclick="adicionarProduto()">Adicionar Mais Produtos</button>
+
+            <div class="form-group">
+                <label for="matricula">Matrícula</label>
+                <input type="text" id="matricula" class="form-control" th:field="*{matricula}" placeholder="Matrícula" required>
+            </div>
+            <div class="form-group">
+                <label for="unidade">Unidade</label>
+                <select id="unidade" class="form-control" th:field="*{unidade}" required>
+                    <option value="Portuário 1">Portuário 1</option>
+                    <option value="Unidade ALB">Unidade ALB</option>
+                </select>
+            </div>
+            <div>
+            	<div th:if="${mensagemSucesso}" class ="Alert alert-sucess">
+            	<p th:text="${mensagemSucesso}"></p>
+            	</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar Pedido</button>
+        </form>
+
+    </div>
+</body>
+</html>

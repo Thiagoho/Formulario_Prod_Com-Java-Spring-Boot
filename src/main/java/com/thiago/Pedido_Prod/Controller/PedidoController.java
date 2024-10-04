@@ -15,25 +15,29 @@ import com.thiago.Pedido_Prod.model.PedidoForm;
 public class PedidoController {
 	
 	@Autowired
-	private JavaMailSender javaMailSender;
+	private JavaMailSender mailSender;
 	
-	@GetMapping("/enviarEmail")
+	@GetMapping("/formulario")
 	public String mostrarFormulario(Model model) {
 		model.addAttribute("pedidoForm", new PedidoForm());
 		return "formulario";
 	}
 	
 	@PostMapping("/enviarEmail")
-	public String enviarEmail(@ModelAttribute PedidoForm pedidoform) {
+	public String enviarEmail(@ModelAttribute PedidoForm pedidoform, Model model) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo("");// Adicionar o email da empresa
 		message.setSubject("Novo Pedido Recebido");
 		message.setText("Nome" + pedidoform.getNomeColaborador() + "\n" +
+						"nomeProduto" + pedidoform.getNomeProduto() + "\n" +
 						"Matricúla" + pedidoform.getMatricula() + "\n" +
 						"Unidade" + pedidoform.getPedido() + "\n" +
 						"Peddido" + pedidoform.getPedido());
 		
 		mailSender.send(message);
+		
+		model.addAttribute("mensagemSucesso", "Pedido foi adicionado com sucesso");
+		
 		return "redirect:/formulario";
 	}
 	
